@@ -1,12 +1,12 @@
 import "./App.css";
 import Canvas1 from "./components/Canvas1";
+import Canvas2 from "./components/Canvas2";
 
 function App() {
   return (
     <>
-      <Canvas1 />
-      <h1>hi</h1>
-      <p>buy</p>
+      {/* <Canvas1 /> */}
+      <Canvas2 />
     </>
   );
 }
