@@ -1,43 +1,47 @@
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-let bubbles = [];
+
 export default function Canvas3() {
   const ref = useRef();
-  bubbles = useMemo(() => {
-    const bubbles = [];
-    for (let index = 0; index < 50; index++) {
-      const diameter = Math.random() * 20;
-      const positionX = Math.random() * 500 + diameter;
-      const positionY = Math.random() * 300 + diameter;
-      const speedX = Math.random() * 5;
-      const speedY = Math.random() * 5;
+  const [state, setState] = useState(0);
 
-      const buble = { diameter, positionX, positionY, speedX, speedY };
-      bubbles.push(buble);
-    }
-    return bubbles;
-  }, []);
   return (
     <>
       <ReactP5Wrapper sketch={sketch} />;
+      <button onClick={() => setState((prev) => (prev += 1))}>clic</button>
+      <h1>{state}</h1>
     </>
   );
 }
 
 function sketch(p5) {
+  console.log("ran");
   p5.setup = setup(p5);
   p5.draw = draw(p5);
 }
 
 function setup(p5) {
   return () => {
+    console.log("h");
     //   p5.createCanvas(600, 400, p5.WEBGL);
     p5.createCanvas(600, 400);
   };
 }
 
 function draw(p5) {
+  let bubbles = [];
+  for (let index = 0; index < 50; index++) {
+    const diameter = p5.random(20);
+    const positionX = p5.random(500 + diameter);
+    const positionY = p5.random(300 + diameter);
+    const speedX = p5.random(5);
+    const speedY = p5.random(5);
+
+    const buble = { diameter, positionX, positionY, speedX, speedY };
+    bubbles.push(buble);
+  }
   return () => {
+    // console.log("t");
     p5.background(0, 0, 0);
     bubbles.forEach((bubble) => {
       p5.fill(255, 255, 255);
