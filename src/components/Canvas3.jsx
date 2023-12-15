@@ -45,22 +45,6 @@ function draw(p5) {
     p5.background(0, 0, 0);
 
     bubbles.forEach((bubble, i) => {
-      p5.fill(255, 255, 255);
-      p5.noStroke();
-      bubble.positionX + bubble.diameter / 2 > p5.width ||
-      bubble.positionX < bubble.diameter / 2
-        ? (bubble.speedX *= -1)
-        : null;
-      bubble.positionY + bubble.diameter / 2 > p5.height ||
-      bubble.positionY < bubble.diameter / 2
-        ? (bubble.speedY *= -1)
-        : null;
-      p5.circle(
-        (bubble.positionX += bubble.speedX),
-        (bubble.positionY += bubble.speedY),
-        bubble.diameter,
-      );
-
       /// consolation lines
       for (let index = i; index < bubbles.length; index++) {
         const distance = p5.dist(
@@ -80,6 +64,21 @@ function draw(p5) {
           p5.stroke(255, 0, 0);
         }
       }
+      p5.fill(255, 255, 255);
+      p5.noStroke();
+      bubble.positionX + bubble.diameter / 2 > p5.width ||
+      bubble.positionX < bubble.diameter / 2
+        ? (bubble.speedX *= -1)
+        : null;
+      bubble.positionY + bubble.diameter / 2 > p5.height ||
+      bubble.positionY < bubble.diameter / 2
+        ? (bubble.speedY *= -1)
+        : null;
+      p5.circle(
+        (bubble.positionX += bubble.speedX),
+        (bubble.positionY += bubble.speedY),
+        bubble.diameter,
+      );
     });
   };
 }
