@@ -32,10 +32,10 @@ function draw(p5) {
   let bubbles = [];
   for (let index = 0; index < 50; index++) {
     const diameter = p5.random(20);
-    const positionX = p5.random(500 + diameter);
-    const positionY = p5.random(300 + diameter);
-    const speedX = p5.random(5);
-    const speedY = p5.random(5);
+    const positionX = p5.random(diameter, 600 - diameter);
+    const positionY = p5.random(diameter, 400 - diameter);
+    const speedX = p5.random(0, 2);
+    const speedY = p5.random(0, 2);
 
     const buble = { diameter, positionX, positionY, speedX, speedY };
     bubbles.push(buble);
@@ -43,7 +43,8 @@ function draw(p5) {
   return () => {
     // console.log("t");
     p5.background(0, 0, 0);
-    bubbles.forEach((bubble) => {
+
+    bubbles.forEach((bubble, i) => {
       p5.fill(255, 255, 255);
       p5.noStroke();
       bubble.positionX + bubble.diameter / 2 > p5.width ||
@@ -59,6 +60,26 @@ function draw(p5) {
         (bubble.positionY += bubble.speedY),
         bubble.diameter,
       );
+
+      /// consolation lines
+      for (let index = i; index < bubbles.length; index++) {
+        const distance = p5.dist(
+          bubble.positionX,
+          bubble.positionY,
+          bubbles[index].positionX,
+          bubbles[index].positionY,
+        );
+        // console.log(i, bubble.positionX, bubbles[i].positionX);
+        if (distance < 50) {
+          p5.line(
+            bubble.positionX,
+            bubble.positionY,
+            bubbles[index].positionX,
+            bubbles[index].positionY,
+          );
+          p5.stroke(255, 0, 0);
+        }
+      }
     });
   };
 }
