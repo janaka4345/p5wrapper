@@ -1,8 +1,8 @@
 import { ReactP5Wrapper } from "@p5-wrapper/react";
-import { useEffect, useMemo, useRef, useState } from "react";
-
+import { useRef, useState } from "react";
+let mousePointer;
 export default function Canvas3() {
-  const ref = useRef();
+  mousePointer = useRef({ x: undefined, y: undefined });
   const [state, setState] = useState(0);
 
   return (
@@ -18,24 +18,36 @@ function sketch(p5) {
   console.log("ran");
   p5.setup = setup(p5);
   p5.draw = draw(p5);
+  p5.mousePressed = () => mousePressed(p5);
+  p5.mouseReleased = mouseReleased;
 }
 
 function setup(p5) {
   return () => {
-    console.log("h");
+    console.log("ran setup");
     //   p5.createCanvas(600, 400, p5.WEBGL);
     p5.createCanvas(600, 400);
   };
 }
+function mousePressed(p5) {
+  // console.log(p5);
+  mousePointer.current.x = p5.mouseX;
+  mousePointer.current.y = p5.mouseY;
+}
+function mouseReleased() {
+  mousePointer.current.x = undefined;
+  mousePointer.current.y = undefined;
+}
 
 function draw(p5) {
-  let bubbles = [];
+  console.log("ran draw");
+  const bubbles = [];
   for (let index = 0; index < 50; index++) {
-    const diameter = p5.random(20);
+    const diameter = p5.random(5, 20);
     const positionX = p5.random(diameter, 600 - diameter);
     const positionY = p5.random(diameter, 400 - diameter);
-    const speedX = p5.random(0, 2);
-    const speedY = p5.random(0, 2);
+    const speedX = p5.random(0, 3);
+    const speedY = p5.random(0, 3);
 
     const buble = { diameter, positionX, positionY, speedX, speedY };
     bubbles.push(buble);
@@ -45,6 +57,29 @@ function draw(p5) {
     p5.background(0, 0, 0);
 
     bubbles.forEach((bubble, i) => {
+      //// click force apply here
+      if (mousePointer.current.x) {
+        // console.log(mousePointer.current.x, mousePointer.current.y);
+        const distance2 = p5.dist(
+          bubble.positionX,
+          bubble.positionY,
+          mousePointer.current.x,
+          mousePointer.current.y,
+        );
+        // Check if the bubble is within the radius of 50 from the clicked point
+        if (distance2 < 100) {
+          // Calculate the angle between the bubble and the clicked point
+          const angle = p5.atan2(
+            bubble.positionY - mousePointer.current.y,
+            bubble.positionX - mousePointer.current.x,
+          );
+
+          // Move the bubble away from the clicked point in the opposite direction
+          bubble.positionX += p5.cos(angle) * 5;
+          bubble.positionY += p5.sin(angle) * 5;
+        }
+      }
+
       /// consolation lines
       for (let index = i; index < bubbles.length; index++) {
         const distance = p5.dist(
@@ -61,6 +96,8 @@ function draw(p5) {
             bubbles[index].positionX,
             bubbles[index].positionY,
           );
+          // const color = p5.map(distance, 0, 50, 0, 255);
+          p5.strokeWeight(2);
           p5.stroke(255, 0, 0);
         }
       }
