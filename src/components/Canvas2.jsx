@@ -11,7 +11,12 @@ export default function Canvas2() {
       const positionY = Math.random() * 300 + diameter;
       const speedX = Math.random() * 5;
       const speedY = Math.random() * 5;
-      const buble = { diameter, positionX, positionY, speedX, speedY };
+      const color = [
+        Math.floor(Math.random() * 255),
+        Math.floor(Math.random() * 255),
+        Math.floor(Math.random() * 255),
+      ];
+      const buble = { diameter, positionX, positionY, speedX, speedY, color };
       bubbles.push(buble);
     }
     return bubbles;
@@ -24,6 +29,7 @@ export default function Canvas2() {
 }
 function sketch(p5) {
   p5.setup = () => {
+    // p5.createCanvas(600, 400, p5.WEBGL);
     p5.createCanvas(600, 400);
   };
 
@@ -32,9 +38,9 @@ function sketch(p5) {
   };
 
   p5.draw = () => {
-    p5.background(255, 0, 0);
+    p5.background("rgba(0, 0, 0, 0.2)");
     bubbles.forEach((bubble) => {
-      p5.fill(0, 255, 0);
+      p5.fill(bubble.color[0], bubble.color[1], bubble.color[2]);
       p5.noStroke();
       bubble.positionX + bubble.diameter / 2 > p5.width ||
       bubble.positionX < bubble.diameter / 2
